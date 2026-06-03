@@ -1,0 +1,259 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-heading: "Outfit", sans-serif;
+  
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --spacing-section: 8rem;
+}
+
+@layer base {
+  :root {
+    --background: oklch(1 0 0);
+    --foreground: oklch(0 0 0);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0 0 0);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0 0 0);
+    --primary: oklch(0 0 0);
+    --primary-foreground: oklch(1 0 0);
+    --secondary: oklch(0.95 0 0);
+    --secondary-foreground: oklch(0 0 0);
+    --muted: oklch(0.95 0 0);
+    --muted-foreground: oklch(0.35 0 0);
+    --accent: oklch(0.9 0 0);
+    --accent-foreground: oklch(0 0 0);
+    --destructive: oklch(0.4 0.15 25);
+    --destructive-foreground: oklch(0.95 0 0);
+    --border: oklch(0 0 0);
+    --input: oklch(0 0 0);
+    --ring: oklch(0.3 0 0);
+    --radius: 0px;
+  }
+
+  .dark {
+    --background: oklch(0 0 0);
+    --foreground: oklch(1 0 0);
+    --card: oklch(0 0 0);
+    --card-foreground: oklch(1 0 0);
+    --popover: oklch(0 0 0);
+    --popover-foreground: oklch(1 0 0);
+    --primary: oklch(1 0 0);
+    --primary-foreground: oklch(0 0 0);
+    --secondary: oklch(0.12 0 0);
+    --secondary-foreground: oklch(1 0 0);
+    --muted: oklch(0.1 0 0);
+    --muted-foreground: oklch(0.7 0 0);
+    --accent: oklch(0.15 0 0);
+    --accent-foreground: oklch(1 0 0);
+    --destructive: oklch(0.45 0.16 25);
+    --destructive-foreground: oklch(1 0 0);
+    --border: oklch(1 0 0);
+    --input: oklch(1 0 0);
+    --ring: oklch(0.7 0 0);
+  }
+}
+
+@layer utilities {
+  .border-neo {
+    border: 3px solid var(--primary);
+  }
+  .shadow-neo {
+    box-shadow: 4px 4px 0px 0px var(--primary);
+  }
+  .shadow-neo-lg {
+    box-shadow: 8px 8px 0px 0px var(--primary);
+  }
+  .shadow-neo-sm {
+    box-shadow: 2px 2px 0px 0px var(--primary);
+  }
+  .hover-lift {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .hover-lift:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px 0px var(--primary);
+  }
+  .hover-lift:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px 0px var(--primary);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased relative;
+    background-image: 
+      linear-gradient(to right, color-mix(in oklch, var(--foreground), transparent 97%) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklch, var(--foreground), transparent 97%) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  body::before {
+    content: "";
+    @apply fixed inset-0 pointer-events-none z-[-5] opacity-[0.03];
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+}
+
+.glass-morphism {
+  @apply bg-background/60 backdrop-blur-md border border-border/50;
+}
+
+.hero-gradient {
+  background: radial-gradient(circle at 50% 50%, rgba(var(--primary), 0.1) 0%, transparent 50%);
+}
+
+.scanline {
+  width: 100%;
+  height: 100px;
+  z-index: 10;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, oklch(0.5 0.1 240 / 0.1) 50%, rgba(0, 0, 0, 0) 100%);
+  opacity: 0.2;
+  position: fixed;
+  bottom: 100%;
+  left: 0;
+  animation: scanline 10s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes scanline {
+  0% { bottom: 100%; }
+  100% { bottom: -100px; }
+}
+
+/* Markdown Styling */
+.markdown-body {
+  @apply text-muted-foreground leading-relaxed;
+}
+
+.markdown-body h1 {
+  @apply text-2xl font-bold text-foreground mb-4 mt-6;
+}
+
+.markdown-body h2 {
+  @apply text-xl font-bold text-foreground mb-3 mt-5;
+}
+
+.markdown-body h3 {
+  @apply text-lg font-bold text-foreground mb-2 mt-4;
+}
+
+.markdown-body p {
+  @apply mb-4;
+}
+
+.markdown-body ul {
+  @apply list-disc list-inside mb-4 space-y-1;
+}
+
+.markdown-body code {
+  @apply bg-muted px-1.5 py-0.5 rounded text-sm font-mono text-primary;
+}
+
+.markdown-body pre {
+  @apply bg-muted/50 p-4 rounded-lg overflow-x-auto mb-6 border border-border/50;
+}
+
+.markdown-body pre code {
+  @apply bg-transparent p-0 text-foreground block;
+}
+
+/* Global scrollbar hiding while retaining standard mousewheel/trackpad scroll */
+html, body, .scrollbar-none {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;  /* Firefox */
+}
+
+html::-webkit-scrollbar, 
+body::-webkit-scrollbar, 
+.scrollbar-none::-webkit-scrollbar {
+  display: none !important;  /* Chrome, Safari, Opera */
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Scoped retro terminal theme overrides for nested Tailwind colors */
+.terminal-theme-cyber-green {
+  --primary: #00FF00 !important;
+  --primary-foreground: #000000 !important;
+  --muted-foreground: rgba(0, 255, 0, 0.75) !important;
+  --secondary: rgba(0, 255, 0, 0.15) !important;
+  --border: #00FF00 !important;
+  --destructive: #ef4444 !important;
+  --destructive-foreground: #ffffff !important;
+
+  --color-primary: #00FF00 !important;
+  --color-primary-foreground: #000000 !important;
+  --color-muted-foreground: rgba(0, 255, 0, 0.75) !important;
+  --color-secondary: rgba(0, 255, 0, 0.15) !important;
+  --color-border: #00FF00 !important;
+  --color-destructive: #ef4444 !important;
+  --color-destructive-foreground: #ffffff !important;
+}
+
+.terminal-theme-amber-decay {
+  --primary: #FFB000 !important;
+  --primary-foreground: #000000 !important;
+  --muted-foreground: rgba(255, 176, 0, 0.75) !important;
+  --secondary: rgba(255, 176, 0, 0.15) !important;
+  --border: #FFB000 !important;
+  --destructive: #f97316 !important;
+  --destructive-foreground: #221600 !important;
+
+  --color-primary: #FFB000 !important;
+  --color-primary-foreground: #000000 !important;
+  --color-muted-foreground: rgba(255, 176, 0, 0.75) !important;
+  --color-secondary: rgba(255, 176, 0, 0.15) !important;
+  --color-border: #FFB000 !important;
+  --color-destructive: #f97316 !important;
+  --color-destructive-foreground: #221600 !important;
+}
+
+.terminal-theme-monochrome {
+  --primary: #ffffff !important;
+  --primary-foreground: #000000 !important;
+  --muted-foreground: #e4e4e7 !important; /* zinc-200 for outstanding contrast on pitch black */
+  --secondary: #27272a !important; /* zinc-800 matching core buffers */
+  --border: #ffffff !important;
+  --destructive: #f87171 !important;
+  --destructive-foreground: #000000 !important;
+
+  --color-primary: #ffffff !important;
+  --color-primary-foreground: #000000 !important;
+  --color-muted-foreground: #e4e4e7 !important;
+  --color-secondary: #27272a !important;
+  --color-border: #ffffff !important;
+  --color-destructive: #f87171 !important;
+  --color-destructive-foreground: #000000 !important;
+}
+
+
