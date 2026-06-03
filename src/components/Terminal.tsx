@@ -129,6 +129,108 @@ export default function Terminal() {
     }
   };
 
+  const getCommandResponse = React.useCallback((cmdName: string): React.ReactNode => {
+    switch (cmdName) {
+      case 'about':
+      case 'whoami':
+        return (
+          <div className="space-y-2 text-xs sm:text-sm font-mono leading-relaxed">
+            <p className="text-primary font-bold text-base">{RESUME_DATA.name}</p>
+            <p className="text-muted-foreground font-semibold">{RESUME_DATA.role}</p>
+            <p className="h-px bg-primary/20 my-1" />
+            <p>{RESUME_DATA.summary}</p>
+          </div>
+        );
+      case 'skills':
+        return (
+          <div className="space-y-3 text-xs sm:text-sm font-mono my-2 text-muted-foreground">
+            <div>
+              <p className="text-primary font-bold">[ PROGRAMMING LANGUAGES ]</p>
+              <p className="pl-4">{RESUME_DATA.skills.languages.join(' • ')}</p>
+            </div>
+            <div>
+              <p className="text-primary font-bold">[ FRAMEWORKS & TOOLS ]</p>
+              <p className="pl-4">{RESUME_DATA.skills.frameworks.join(' • ')}</p>
+            </div>
+            <div>
+              <p className="text-primary font-bold">[ DATABASES ]</p>
+              <p className="pl-4">{RESUME_DATA.skills.databases.join(' • ')}</p>
+            </div>
+            <div>
+              <p className="text-primary font-bold">[ OTHER TECH & DEVOPS ]</p>
+              <p className="pl-4">{[...RESUME_DATA.skills.libraries, ...RESUME_DATA.skills.tools, ...RESUME_DATA.skills.devops].join(' • ')}</p>
+            </div>
+          </div>
+        );
+      case 'projects':
+        return (
+          <div className="space-y-4 text-xs sm:text-sm font-mono my-2 font-mono">
+            {RESUME_DATA.projects.map((proj, idx) => (
+              <div key={idx} className="border-l-2 border-primary pl-4 py-1">
+                <p className="text-primary font-bold uppercase">{idx + 1}. {proj.title}</p>
+                <p className="text-muted-foreground my-1">{proj.description}</p>
+                <ul className="list-disc list-inside text-xs select-none pl-2 opacity-80 text-muted-foreground">
+                  {proj.details.map((detail, dIdx) => (
+                    <li key={dIdx}>{detail}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        );
+      case 'contact':
+        return (
+          <div className="space-y-2 text-xs sm:text-sm font-mono my-2 text-primary">
+            <div><span className="text-muted-foreground font-semibold">EMAIL:</span> <a href={`mailto:${RESUME_DATA.email}`} className="text-primary underline hover:opacity-80">{RESUME_DATA.email}</a></div>
+            <div><span className="text-muted-foreground font-semibold">PHONE:</span> <span className="text-primary">{RESUME_DATA.phone}</span></div>
+            <div><span className="text-muted-foreground font-semibold">LINKEDIN:</span> <a href={RESUME_DATA.linkedin} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:opacity-80">{RESUME_DATA.linkedin}</a></div>
+            <div><span className="text-muted-foreground font-semibold">CURRENT_LOCATION:</span> <span className="text-primary">Bengaluru, India</span></div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  }, []);
+
+  const processQuery = React.useCallback(
+    (input: string): React.ReactNode | null => {
+      const lower = input.toLowerCase().trim();
+
+      // Greeting
+      if (lower.match(/^(hi|hello|hey|greetings|yo)/)) {
+        return (
+          <div className="space-y-1 text-xs sm:text-sm font-mono my-1 leading-relaxed text-primary">
+            <p>Hello! I'm Manjunathan's virtual assistant. How can I help you today?</p>
+            <p className="text-[10px] text-muted-foreground">Type <span className="font-mono font-bold text-primary">help</span> to view all commands, or just ask about his skills or projects!</p>
+          </div>
+        );
+      }
+
+      // About
+      if (lower.match(/(who|about|author|creator|developer|name)/)) {
+        return getCommandResponse('about');
+      }
+
+      // Skills
+      if (lower.match(/(skill|stack|tech|language|framework)/)) {
+        return getCommandResponse('skills');
+      }
+
+      // Projects
+      if (lower.match(/(project|work|app|site|portfolio)/)) {
+        return getCommandResponse('projects');
+      }
+
+      // Contact
+      if (lower.match(/(contact|email|reach|hire|github|linkedin)/)) {
+        return getCommandResponse('contact');
+      }
+
+      return null;
+    },
+    [getCommandResponse],
+  );
+
   const executeCommand = (cmd: string) => {
     const trimmedVal = cmd.trim();
     if (trimmedVal) {
@@ -166,71 +268,160 @@ export default function Terminal() {
 
       case 'help':
         output = (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm font-mono my-1">
-            <div><span className="font-bold text-primary">whoami</span> - Details about my role & background</div>
-            <div><span className="font-bold text-primary">skills</span> - Technical skills categorized</div>
-            <div><span className="font-bold text-primary">projects</span> - Showcase of building experiences</div>
-            <div><span className="font-bold text-primary">experience</span> - Work history breakdown</div>
-            <div><span className="font-bold text-primary">theme [style]</span> - Cycle/set terminal retro color themes</div>
-            <div><span className="font-bold text-primary">matrix</span> - Cascading binary rain console sequence</div>
-            <div><span className="font-bold text-primary">game</span> - Playable local terminal snake simulation</div>
-            <div><span className="font-bold text-primary">contact</span> - Direct channels to get in touch</div>
-            <div><span className="font-bold text-primary">clear</span> - Push clean lines to stack</div>
-            <div><span className="font-bold text-primary">github [user]</span> - Simulated repo contribution inspection</div>
+          <div className="space-y-1.5 text-xs sm:text-sm font-mono my-2 leading-relaxed">
+            <div className="flex flex-col sm:flex-row gap-x-8">
+              <span className="text-primary font-bold w-28 shrink-0">ls</span>
+              <span className="text-muted-foreground">List available files</span>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-x-8">
+              <span className="text-primary font-bold w-28 shrink-0">cat [file]</span>
+              <span className="text-muted-foreground">Read a file</span>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-x-8">
+              <span className="text-primary font-bold w-28 shrink-0">about</span>
+              <span className="text-muted-foreground">Learn about me</span>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-x-8">
+              <span className="text-primary font-bold w-28 shrink-0">skills</span>
+              <span className="text-muted-foreground">View technical skills</span>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-x-8">
+              <span className="text-primary font-bold w-28 shrink-0">projects</span>
+              <span className="text-muted-foreground">List recent projects</span>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-x-8">
+              <span className="text-primary font-bold w-28 shrink-0">contact</span>
+              <span className="text-muted-foreground">How to reach me</span>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-x-8">
+              <span className="text-primary font-bold w-28 shrink-0">theme [style]</span>
+              <span className="text-muted-foreground">Change theme (green, amber, white)</span>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-x-8">
+              <span className="text-primary font-bold w-28 shrink-0">play</span>
+              <span className="text-muted-foreground">Play a minigame</span>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-x-8">
+              <span className="text-primary font-bold w-28 shrink-0">clear</span>
+              <span className="text-muted-foreground">Clear the terminal</span>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-x-8">
+              <span className="text-primary font-bold w-28 shrink-0">exit</span>
+              <span className="text-muted-foreground">Close terminal</span>
+            </div>
           </div>
         );
         break;
 
-      case 'whoami':
+      case 'ls':
         output = (
-          <div className="space-y-2 text-xs sm:text-sm font-mono leading-relaxed">
-            <p className="text-primary font-bold text-base">{RESUME_DATA.name}</p>
-            <p className="text-muted-foreground font-semibold">{RESUME_DATA.role}</p>
-            <p className="h-px bg-primary/20 my-1" />
-            <p>{RESUME_DATA.summary}</p>
+          <div className="space-y-1 text-xs sm:text-sm font-mono my-1 leading-relaxed text-primary">
+            <p className="font-bold opacity-75">Directory index: /home/manjunathan</p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2">
+              <span className="text-emerald-400 font-bold">📄 about.txt</span>
+              <span className="text-emerald-400 font-bold">📄 skills.json</span>
+              <span className="text-emerald-400 font-bold">📄 projects.md</span>
+              <span className="text-emerald-400 font-bold">📄 experience.md</span>
+              <span className="text-emerald-400 font-bold">📄 contact.cfg</span>
+            </div>
+            <p className="text-[10px] text-muted-foreground mt-2">Type <span className="font-bold text-primary font-mono">cat &lt;filename&gt;</span> to read a file.</p>
           </div>
         );
+        break;
+
+      case 'cat':
+        const fileParam = args[1];
+        if (!fileParam) {
+          output = (
+            <div className="text-destructive font-mono text-xs sm:text-sm">
+              Usage: <span className="font-bold">cat &lt;filename&gt;</span> (e.g., <span className="underline">cat about.txt</span>)
+            </div>
+          );
+          isError = true;
+        } else {
+          const lowerFile = fileParam.toLowerCase();
+          if (lowerFile === 'about.txt') {
+            output = (
+              <div className="space-y-2 text-xs sm:text-sm font-mono leading-relaxed p-2 bg-primary/5 border border-primary/20">
+                <p className="text-primary font-bold text-base">{RESUME_DATA.name}</p>
+                <p className="text-muted-foreground font-semibold">{RESUME_DATA.role}</p>
+                <p className="h-px bg-primary/20 my-1" />
+                <p>{RESUME_DATA.summary}</p>
+              </div>
+            );
+          } else if (lowerFile === 'skills.json') {
+            output = (
+              <div className="space-y-2 text-xs sm:text-sm font-mono leading-relaxed p-2 bg-primary/5 border border-primary/20">
+                <p className="text-primary font-bold">[ Technical Skills ]</p>
+                <pre className="text-[11px] leading-tight text-muted-foreground overflow-x-auto whitespace-pre">
+{JSON.stringify({
+  languages: RESUME_DATA.skills.languages,
+  frameworks: RESUME_DATA.skills.frameworks,
+  databases: RESUME_DATA.skills.databases,
+  tools: [...RESUME_DATA.skills.libraries, ...RESUME_DATA.skills.tools, ...RESUME_DATA.skills.devops]
+}, null, 2)}
+                </pre>
+              </div>
+            );
+          } else if (lowerFile === 'projects.md') {
+            output = (
+              <div className="space-y-4 text-xs sm:text-sm font-mono leading-relaxed p-2 bg-primary/5 border border-primary/20">
+                {RESUME_DATA.projects.map((proj, idx) => (
+                  <div key={idx} className="border-l-2 border-primary pl-3">
+                    <p className="text-primary font-bold uppercase">{proj.title}</p>
+                    <p className="text-muted-foreground my-1">{proj.description}</p>
+                    <p className="text-xs opacity-70">Key takeaways: {proj.details.join(', ')}</p>
+                  </div>
+                ))}
+              </div>
+            );
+          } else if (lowerFile === 'experience.md') {
+            output = (
+              <div className="space-y-4 text-xs sm:text-sm font-mono leading-relaxed p-2 bg-primary/5 border border-primary/20">
+                {RESUME_DATA.experience.map((exp, idx) => (
+                  <div key={idx} className="border-l-2 border-dotted border-primary pl-3">
+                    <p className="text-primary font-bold">{exp.title} at {exp.company} ({exp.period})</p>
+                    <p className="text-muted-foreground text-xs">{exp.location}</p>
+                    <ul className="list-disc list-inside mt-1 space-y-1 text-xs text-muted-foreground">
+                      {exp.achievements.map((ach, aIdx) => (
+                        <li key={aIdx}>{ach}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            );
+          } else if (lowerFile === 'contact.cfg') {
+            output = (
+              <div className="space-y-2 text-xs sm:text-sm font-mono leading-relaxed p-2 bg-primary/5 border border-primary/20">
+                <p className="text-primary font-bold">[ Connection Matrix Configuration ]</p>
+                <div><span className="text-muted-foreground font-semibold">EMAIL = </span> <a href={`mailto:${RESUME_DATA.email}`} className="text-primary underline">{RESUME_DATA.email}</a></div>
+                <div><span className="text-muted-foreground font-semibold">PHONE = </span> <span className="text-primary">{RESUME_DATA.phone}</span></div>
+                <div><span className="text-muted-foreground font-semibold">LINKEDIN = </span> <a href={RESUME_DATA.linkedin} target="_blank" rel="noopener noreferrer" className="text-primary underline">{RESUME_DATA.linkedin}</a></div>
+              </div>
+            );
+          } else {
+            output = (
+              <div className="text-destructive font-mono text-xs sm:text-sm">
+                File not found: <span className="underline">{fileParam}</span>. Type <span className="font-bold">ls</span> to see all files.
+              </div>
+            );
+            isError = true;
+          }
+        }
+        break;
+
+      case 'about':
+      case 'whoami':
+        output = getCommandResponse('about');
         break;
 
       case 'skills':
-        output = (
-          <div className="space-y-3 text-xs sm:text-sm font-mono my-2 text-muted-foreground">
-            <div>
-              <p className="text-primary font-bold">[ PROGRAMMING LANGUAGES ]</p>
-              <p className="pl-4">{RESUME_DATA.skills.languages.join(' • ')}</p>
-            </div>
-            <div>
-              <p className="text-primary font-bold">[ FRAMEWORKS & TOOLS ]</p>
-              <p className="pl-4">{RESUME_DATA.skills.frameworks.join(' • ')}</p>
-            </div>
-            <div>
-              <p className="text-primary font-bold">[ DATABASES ]</p>
-              <p className="pl-4">{RESUME_DATA.skills.databases.join(' • ')}</p>
-            </div>
-            <div>
-              <p className="text-primary font-bold">[ OTHER TECH & DEVOPS ]</p>
-              <p className="pl-4">{[...RESUME_DATA.skills.libraries, ...RESUME_DATA.skills.tools, ...RESUME_DATA.skills.devops].join(' • ')}</p>
-            </div>
-          </div>
-        );
+        output = getCommandResponse('skills');
         break;
 
       case 'projects':
-        output = (
-          <div className="space-y-4 text-xs sm:text-sm font-mono my-2">
-            {RESUME_DATA.projects.map((proj, idx) => (
-              <div key={idx} className="border-l-2 border-primary pl-4 py-1">
-                <p className="text-primary font-bold uppercase">{idx + 1}. {proj.title}</p>
-                <p className="text-muted-foreground my-1">{proj.description}</p>
-                <ul className="list-disc list-inside text-xs select-none pl-2 opacity-80">
-                  {proj.details.map((detail, dIdx) => (
-                    <li key={dIdx}>{detail}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        );
+        output = getCommandResponse('projects');
         break;
 
       case 'experience':
@@ -258,14 +449,7 @@ export default function Terminal() {
         break;
 
       case 'contact':
-        output = (
-          <div className="space-y-2 text-xs sm:text-sm font-mono my-2">
-            <div><span className="text-muted-foreground font-semibold">EMAIL:</span> <a href={`mailto:${RESUME_DATA.email}`} className="text-primary underline hover:opacity-80">{RESUME_DATA.email}</a></div>
-            <div><span className="text-muted-foreground font-semibold">PHONE:</span> <span className="text-primary">{RESUME_DATA.phone}</span></div>
-            <div><span className="text-muted-foreground font-semibold">LINKEDIN:</span> <a href={RESUME_DATA.linkedin} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:opacity-80">{RESUME_DATA.linkedin}</a></div>
-            <div><span className="text-muted-foreground font-semibold">CURRENT_LOCATION:</span> <span className="text-primary">Bengaluru, India</span></div>
-          </div>
-        );
+        output = getCommandResponse('contact');
         break;
 
       case 'github':
@@ -342,13 +526,32 @@ export default function Terminal() {
         );
         break;
 
-      default:
-        isError = true;
+      case 'exit':
         output = (
-          <div className="text-destructive font-mono text-xs sm:text-sm">
-            Command not found: <span className="underline">{primaryCmd}</span>. Type <span className="font-bold">help</span> to list commands.
+          <div className="text-xs sm:text-sm font-mono my-1 leading-relaxed text-primary italic animate-fade-in">
+            Connection closed. Thank you for visiting! Type <span className="font-bold underline">help</span> or refresh page to start a new session.
           </div>
         );
+        break;
+
+      case 'hello':
+      case 'hi':
+      case 'hey':
+      case 'yo':
+        output = processQuery(primaryCmd);
+        break;
+
+      default:
+        const queryResult = processQuery(cmd);
+        if (queryResult) {
+          output = queryResult;
+        } else {
+          output = (
+            <div className="space-y-1 text-xs sm:text-sm font-mono my-1 leading-relaxed text-primary w-full">
+              <p>Hello! I'm Manjunathan's conversational assistant. I'm ready to present his portfolio. Feel free to ask about his 'skills', 'projects', 'experience', or 'contact', or type 'help' to see all native shell tools!</p>
+            </div>
+          );
+        }
     }
 
     setHistory((prev) => [
@@ -365,7 +568,7 @@ export default function Terminal() {
   };
 
   // Suggestion autocomplete engine
-  const COMMANDS = ['help', 'whoami', 'skills', 'projects', 'experience', 'contact', 'github', 'theme', 'matrix', 'game', 'snake', 'clear'];
+  const COMMANDS = ['help', 'whoami', 'skills', 'projects', 'experience', 'contact', 'github', 'theme', 'matrix', 'game', 'snake', 'clear', 'ls', 'cat', 'about', 'play', 'exit', 'hello', 'hi', 'hey', 'yo'];
   const trimmedInput = inputVal.trim().toLowerCase();
   const matchedCmd = COMMANDS.find((c) => c.startsWith(trimmedInput));
   const suggestion = matchedCmd && trimmedInput && matchedCmd !== trimmedInput
@@ -615,7 +818,7 @@ export default function Terminal() {
       {!isBooting && (
         <div className="border-t border-primary/20 pt-2 flex flex-wrap gap-1.5 select-none z-10 shrink-0">
           <span className={`text-[10px] uppercase font-bold mr-1.5 self-center ${t.mutedText}`}>Quick commands:</span>
-          {['whoami', 'skills', 'projects', 'theme', 'matrix', 'game', 'experience', 'contact'].map((cmd) => (
+          {['ls', 'cat about.txt', 'skills', 'projects', 'theme', 'play', 'experience', 'contact'].map((cmd) => (
             <button
               key={cmd}
               type="button"

@@ -12,7 +12,7 @@ export default function Hero() {
   const roles = [
     'Back-end Software Engineer',
     'Vibecoder',
-    'Gamer',
+    'AIML Developer',
     'Content Creator'
   ];
 

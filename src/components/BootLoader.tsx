@@ -15,17 +15,8 @@ interface BootStep {
 }
 
 const BOOT_STEPS: BootStep[] = [
-  { text: "BOOTING RETRO_OS COMPATIBLE ARCHITECTURE x86_64...", prefix: "[ INFO ]", isBold: true, color: "text-primary/70", delay: 280 },
-  { text: "Loading Linux kernel version 5.10.142-manjunathan-os...", prefix: "[ SYSTEM ]", delay: 180 },
-  { text: "Mounted virtual filesystem partition /sys/kernel/debug", prefix: "OK", delay: 120 },
-  { text: "Initialized direct DMA channel ports for terminal stream matrices", prefix: "OK", delay: 140 },
-  { text: "Started retro CRT TTY screen scanline simulation controller daemon", prefix: "OK", delay: 200 },
-  { text: "Synthetic soundboard: Web Audio API oscillator synthesis module loaded", prefix: "OK", delay: 160 },
-  { text: "Allocated binary cache pipelines for snakes & custom command matrix-rain", prefix: "OK", delay: 100 },
-  { text: "Detected viewport bounds; calibrated responsive canvas grid geometry", prefix: "OK", delay: 130 },
-  { text: "Synchronized local high scores and remote navigation coordinates", prefix: "OK", delay: 170 },
-  { text: "Secure handshake negotiated successfully with visitor client node", prefix: "OK", delay: 150 },
-  { text: "Initialized bash command autocomplete mapping on port 3000", prefix: "INFO", color: "text-primary/80", delay: 220 },
+  { text: "Welcome to Manjunathan's Portfolio Terminal v1.0.0", isBold: true, color: "text-primary text-xs sm:text-sm md:text-base font-bold mb-1", delay: 200 },
+  { text: "I am a conversational OS assistant. Type help for commands, or just chat with me!", color: "text-primary/90 text-xs sm:text-sm", delay: 150 }
 ];
 
 export default function BootLoader({ onLineAdded, onComplete }: BootLoaderProps) {
@@ -86,7 +77,6 @@ export default function BootLoader({ onLineAdded, onComplete }: BootLoaderProps)
 
   return (
     <div className="space-y-1 text-primary font-mono text-[10px] sm:text-xs">
-      <div className="text-primary/70 mb-2 font-bold select-none">[ CHETTIAR-OS RETRO SYSTEM INITIALIZATION ]</div>
       
       <div className="space-y-0.5 font-mono">
         {BOOT_STEPS.slice(0, visibleLines).map((step, idx) => {
@@ -118,16 +108,7 @@ export default function BootLoader({ onLineAdded, onComplete }: BootLoaderProps)
       </div>
 
       {bootFinished && (
-        <div className="pt-3 animate-fade-in">
-          <div className="text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-2 py-0.5 w-fit rounded-sm border border-primary/20 animate-pulse">
-            &gt;&gt; CONSOLE SESSION SECURELY ROOTED &lt;&lt;
-          </div>
-          
-          <div className="pt-3 text-xs">
-            Type <span className="font-bold text-primary underline">help</span> to view all commands. Tap on the command chips below if you are on a mobile device.
-          </div>
-          <div className="h-px bg-primary/20 my-2" />
-        </div>
+        <div className="my-2" />
       )}
     </div>
   );
