@@ -10,5 +10,5 @@ coverage/
 .vercel
 .env*
 
-# Local planning notes — not for repo
-FUTURE_ENHANCEMENTS.md
+# Local planning notes
+UPCOMING_UPDATES.md
