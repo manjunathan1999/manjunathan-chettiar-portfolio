@@ -104,10 +104,22 @@ npm run preview
 ### Type Check
 
 ```bash
-npm run lint
+npm run type-check
 ```
 
-This project uses the `lint` script for TypeScript checking with `tsc --noEmit`.
+This project uses `npm run type-check` for TypeScript checking and `npm run lint` for ESLint.
+
+### Test
+
+```bash
+npm run test
+```
+
+### Format
+
+```bash
+npm run format
+```
 
 ## Editing Portfolio Content
 
@@ -165,6 +177,32 @@ npm run build
 ```
 
 deploy the generated `dist` directory to any static hosting provider such as Vercel, Netlify, Cloudflare Pages, GitHub Pages, or a static file server.
+
+## CI/CD with Vercel
+
+This repository includes a GitHub Actions workflow at `.github/workflows/vercel.yml`.
+
+The pipeline runs on:
+
+- Pull requests to `main`: type-checks, builds, and deploys a Vercel preview.
+- Pushes to `main`: type-checks, builds, and deploys to Vercel production.
+
+Add these secrets in GitHub under **Settings > Secrets and variables > Actions**:
+
+```text
+VERCEL_TOKEN
+VERCEL_ORG_ID
+VERCEL_PROJECT_ID
+```
+
+You can get them by linking the project with the Vercel CLI:
+
+```bash
+npx vercel login
+npx vercel link
+```
+
+After linking, Vercel creates `.vercel/project.json`. Use its `orgId` and `projectId` values for the GitHub secrets, and create `VERCEL_TOKEN` from the Vercel dashboard under account tokens.
 
 ## Notes
 

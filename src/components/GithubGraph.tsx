@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Github, Search, GitBranch, Users, BookOpen, Star, Calendar } from 'lucide-react';
+import { GitHubCalendar } from 'react-github-calendar';
+import { Github, Search, GitBranch, Users, BookOpen, Calendar } from 'lucide-react';
 
 interface GitHubProfile {
   login: string;
@@ -17,14 +18,11 @@ export default function GithubGraph() {
   const [searchInput, setSearchInput] = useState('manjunathanchettiar2908');
   const [profile, setProfile] = useState<GitHubProfile | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [usingCache, setUsingCache] = useState(false);
-  const [hoveredCell, setHoveredCell] = useState<{ count: number; date: string } | null>(null);
 
   // Fetch GitHub public statistics
   const fetchGitHubUser = async (user: string) => {
     setLoading(true);
-    setError(null);
     setUsingCache(false);
     try {
       const res = await fetch(`https://api.github.com/users/${user}`);
@@ -42,7 +40,7 @@ export default function GithubGraph() {
         following: data.following,
         html_url: data.html_url,
       });
-    } catch (err: any) {
+    } catch (err) {
       console.warn('GitHub API fetch failed, loading pre-cached offline telemetry:', err);
       // Fallback beautiful cached profile to maintain a perfectly populated UI
       setProfile({
@@ -70,59 +68,6 @@ export default function GithubGraph() {
     if (searchInput.trim()) {
       setUsername(searchInput.trim());
     }
-  };
-
-  // Generate 53 weeks x 7 days representing a contribution board
-  const generateContributionData = () => {
-    const data = [];
-    const date = new Date();
-    date.setFullYear(date.getFullYear() - 1); // Start from 1 year ago
-
-    // Consistent pseudo-random seed based on username for individual graphs
-    let hash = 0;
-    for (let j = 0; j < username.length; j++) {
-      hash = username.charCodeAt(j) + ((hash << 5) - hash);
-    }
-
-    const randomWithSeed = (i: number) => {
-      const x = Math.sin(hash + i) * 10000;
-      return x - Math.floor(x);
-    };
-
-    for (let col = 0; col < 53; col++) {
-      const week = [];
-      for (let row = 0; row < 7; row++) {
-        // Generate dynamic contribution count
-        const rand = randomWithSeed(col * 7 + row);
-        let count = 0;
-        if (rand > 0.85) count = Math.floor(rand * 12) + 1; // High active days
-        else if (rand > 0.45) count = Math.floor(rand * 4) + 1; // Standard active days
-        
-        // Format date string
-        const currentDate = new Date(date);
-        currentDate.setDate(date.getDate() + (col * 7 + row));
-        const dateString = currentDate.toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric',
-        });
-
-        week.push({ count, date: dateString });
-      }
-      data.push(week);
-    }
-    return data;
-  };
-
-  const contributionGrid = generateContributionData();
-
-  // Color keys for monochromatic heatmap
-  const getMonochromeColor = (count: number) => {
-    if (count === 0) return 'bg-secondary border-primary/10 dark:bg-muted dark:border-primary/5'; // zero commits
-    if (count <= 2) return 'bg-neutral-200 border-primary/25 dark:bg-neutral-800'; // light gray
-    if (count <= 5) return 'bg-neutral-400 border-primary/40 dark:bg-neutral-600'; // medium gray
-    if (count <= 9) return 'bg-neutral-600 border-primary/60 dark:bg-neutral-400'; // dark gray
-    return 'bg-primary border-primary'; // pure primary (black in light mode, white in dark mode)
   };
 
   return (
@@ -223,46 +168,26 @@ export default function GithubGraph() {
             <Calendar className="size-3.5" />
             365 days contribution mapping
           </h4>
-          <div className="text-[10px] sm:text-xs">
-            {hoveredCell ? (
-              <span className="bg-primary text-primary-foreground font-bold px-2 py-0.5 border border-primary animate-fade-in">
-                {hoveredCell.count === 0 ? 'No' : hoveredCell.count} commits on {hoveredCell.date}
-              </span>
-            ) : (
-              <span className="opacity-60 italic">Hover grid elements to inspect</span>
-            )}
-          </div>
+          <span className="text-[10px] sm:text-xs opacity-60 italic">Live public GitHub contribution calendar</span>
         </div>
 
-        {/* Contribution Matrix representation */}
         <div className="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-primary/25 scrollbar-track-transparent">
-          <div className="flex gap-[3px] min-w-[700px]">
-            {contributionGrid.map((week, weekIdx) => (
-              <div key={weekIdx} className="flex flex-col gap-[3px]">
-                {week.map((day, dayIdx) => (
-                  <div
-                    key={dayIdx}
-                    onMouseEnter={() => setHoveredCell({ count: day.count, date: day.date })}
-                    onMouseLeave={() => setHoveredCell(null)}
-                    className={`size-3 border transition-colors duration-100 ${getMonochromeColor(
-                      day.count
-                    )}`}
-                  />
-                ))}
-              </div>
-            ))}
+          <div className="min-w-[720px]">
+            <GitHubCalendar
+              username={username}
+              colorScheme="light"
+              blockSize={12}
+              blockMargin={3}
+              fontSize={12}
+              labels={{
+                totalCount: '{{count}} contributions in the last year',
+              }}
+              theme={{
+                light: ['#f4f4f5', '#d4d4d8', '#a1a1aa', '#52525b', '#000000'],
+                dark: ['#18181b', '#3f3f46', '#71717a', '#d4d4d8', '#ffffff'],
+              }}
+            />
           </div>
-        </div>
-
-        {/* Legend */}
-        <div className="flex justify-end items-center gap-2 mt-4 text-[10px] sm:text-xs font-bold text-muted-foreground select-none">
-          <span>Less</span>
-          <div className="size-3 border border-primary/10 bg-secondary dark:bg-muted" />
-          <div className="size-3 border border-primary/25 bg-neutral-200 dark:bg-neutral-800" />
-          <div className="size-3 border border-primary/40 bg-neutral-400 dark:bg-neutral-600" />
-          <div className="size-3 border border-primary/60 bg-neutral-600 dark:bg-neutral-400" />
-          <div className="size-3 border border-primary bg-primary" />
-          <span>More</span>
         </div>
       </div>
     </div>

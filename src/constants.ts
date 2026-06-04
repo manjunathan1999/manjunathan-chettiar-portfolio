@@ -2,7 +2,7 @@ export const RESUME_DATA = {
   name: "Manjunathan Chettiar",
   role: "Back-end Software Engineer",
   email: "manjunathanchettiar2908@gmail.com",
-  phone: "+91 9106122143",
+  phone: "+91 91XXXXX143",
   linkedin: "https://www.linkedin.com/in/manjunathan-chettiar1999",
   summary: "Back-end Software Engineer with 2 years of professional experience in designing, developing, and optimizing scalable backend systems. Skilled in Python, FastAPI, Django, Celery, and SQL with expertise in RESTful API development, microservices, and data processing pipelines. Adept at asynchronous task execution, database optimization, and cloud-based deployments. Proven track record of improving system performance, reducing latency, and delivering reliable, high-performance solutions.",
   experience: [
