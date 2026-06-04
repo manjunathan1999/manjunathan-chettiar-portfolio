@@ -210,9 +210,10 @@ export default function App() {
                         <HelpCircle className="size-3.5" />
                         <span>GL_RENDER_CODELOCK</span>
                       </div>
-                      <div className="flex gap-1">
-                        <span className="size-2 bg-yellow-400 rounded-full" />
-                        <span className="size-2 bg-green-400 rounded-full" />
+                      <div className="flex gap-1.5">
+                        <span className="size-2.5 bg-red-500 rounded-full" />
+                        <span className="size-2.5 bg-yellow-400 rounded-full" />
+                        <span className="size-2.5 bg-green-500 rounded-full" />
                       </div>
                     </div>
                     {/* Canvas Frame */}

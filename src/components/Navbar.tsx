@@ -100,7 +100,13 @@ export default function Navbar() {
             MJ
           </span>
           <span className="hidden sm:inline-block font-mono text-xs font-bold bg-secondary border border-primary px-1.5 py-0.5">
-            SYS_R25_OCT
+            {(() => {
+              const d = new Date();
+              const day = String(d.getDate()).padStart(2, '0');
+              const mon = d.toLocaleDateString('en-GB', { month: 'short' }).toUpperCase();
+              const yr = String(d.getFullYear()).slice(2);
+              return `SYS_D${day}_${mon}${yr}`;
+            })()}
           </span>
         </a>
 
@@ -199,11 +205,14 @@ export default function Navbar() {
 
       </div>
 
-      {/* Sleek, full-width scroll progress bar (track is invisible, starts exactly from the left edge) */}
-      <div className="absolute bottom-[-6px] left-0 right-0 h-[3px] bg-transparent pointer-events-none">
-        <div 
-          className="h-full bg-primary transition-all duration-100 ease-out" 
-          style={{ width: `${scrollProgress}%` }}
+      {/* Scroll progress bar — transform:scaleX avoids layout shifts from width animation */}
+      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-primary/20 pointer-events-none">
+        <div
+          className="h-full w-full bg-primary origin-left"
+          style={{
+            transform: `scaleX(${scrollProgress / 100})`,
+            transition: 'transform 80ms linear',
+          }}
         />
       </div>
     </motion.nav>

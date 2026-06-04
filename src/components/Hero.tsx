@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect } from 'react';
-import { ArrowDown, Github, Linkedin, Mail, Sparkles, Terminal as TerminalIcon } from 'lucide-react';
+import { ArrowDown, FileText, Github, Linkedin, Mail, Sparkles, Terminal as TerminalIcon } from 'lucide-react';
 import { RESUME_DATA } from '@/src/constants';
 import MatrixRain from '@/src/components/MatrixRain';
 import Terminal from '@/src/components/Terminal';
@@ -11,8 +11,9 @@ export default function Hero() {
   const [roleIndex, setRoleIndex] = useState(0);
   const roles = [
     'Back-end Software Engineer',
+    'Computer Vision Engineer',
+    'AI/ML Developer',
     'Vibecoder',
-    'AIML Developer',
     'Content Creator'
   ];
 
@@ -131,6 +132,16 @@ export default function Hero() {
               title="Send Direct Email"
             >
               <Mail className="size-4 sm:size-5" />
+            </a>
+            <a 
+              href={RESUME_DATA.resumeUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => audioSystem.playClick()}
+              className="bg-background text-primary border-neo shadow-neo hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-neo-sm transition-all font-mono font-bold p-3 cursor-pointer"
+              title="Download Resume"
+            >
+              <FileText className="size-4 sm:size-5" />
             </a>
           </motion.div>
         </div>

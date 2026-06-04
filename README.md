@@ -1,212 +1,233 @@
-# Manjunathan Chettiar Portfolio
+```
+███╗   ███╗     ██╗ ██████╗ ███████╗    ██╗   ██╗ ██╗    ██████╗
+████╗ ████║     ██║██╔═══██╗██╔════╝    ██║   ██║███║   ██╔═████╗
+██╔████╔██║     ██║██║   ██║███████╗    ██║   ██║╚██║   ██║██╔██║
+██║╚██╔╝██║██   ██║██║   ██║╚════██║    ╚██╗ ██╔╝ ██║   ████╔╝██║
+██║ ╚═╝ ██║╚█████╔╝╚██████╔╝███████║     ╚████╔╝  ██║██╗╚██████╔╝
+╚═╝     ╚═╝ ╚════╝  ╚═════╝ ╚══════╝      ╚═══╝   ╚═╝╚═╝ ╚═════╝
+```
 
-An interactive developer portfolio for **Manjunathan Chettiar**, a Back-end Software Engineer focused on Python, FastAPI, Django, Celery, SQL, AI integrations, microservices, and scalable data pipelines.
+```
+[MJOS v1.0] > BOOTING SYSTEM...
+[MJOS v1.0] > SUBJECT: MANJUNATHAN CHETTIAR — BACK-END ENGINEER
+[MJOS v1.0] > STATUS: OPEN_FOR_RECRUITMENT
+[MJOS v1.0] > LOADING PORTFOLIO....... ████████████ 100%
+```
 
-The site is built as a retro terminal-inspired portfolio experience: a neo-brutalist visual system, animated Matrix-style hero, conversational command-line interface, 3D WebGL render panel, technical project sections, writing cards, and contact flow.
+---
 
-## Highlights
+## `> SUBJECT_PROFILE.cfg`
 
-- Interactive terminal with portfolio commands such as `help`, `about`, `skills`, `projects`, `experience`, `contact`, `theme`, `matrix`, and `play`.
-- Terminal quick commands, command history navigation, autocomplete hints, boot animation, and synthesized Web Audio feedback.
-- Retro terminal themes: default, cyber green, amber decay, and monochrome.
-- Embedded Snake mini-game launched from the terminal with `play`, `snake`, or `game`.
-- Matrix rain background in the hero and an additional terminal matrix overlay mode.
-- 3D animated WebGL object built with React Three Fiber, Drei, and Three.js.
-- Smooth page scrolling with Lenis and section navigation.
-- Dark/light theme toggle with local storage persistence.
-- Resume-driven content for experience, skills, projects, education, certifications, and contact details.
-- Responsive layout with Tailwind CSS v4 and reusable UI primitives.
+```
+NAME         : Manjunathan Chettiar
+ALIAS        : MJ
+ROLE         : Back-end Software Engineer
+LOCATION     : Bengaluru, India
+STACK        : Python · FastAPI · Django · Celery · Docker · SQL · AI
+STATUS       : ONLINE — Accepting new missions
+```
 
-## Tech Stack
+Personal developer portfolio built with a neo-brutalist hacker aesthetic.
+Features an interactive terminal, Matrix rain hero, 3D WebGL render panel,
+synthesized audio feedback, and a full CI/CD pipeline to Vercel.
 
-- **Framework:** React 19, Vite 6, TypeScript
-- **Styling:** Tailwind CSS v4, custom CSS variables, neo-brutalist utility classes
-- **Animation:** Motion for React, Lenis smooth scrolling
-- **3D:** Three.js, `@react-three/fiber`, `@react-three/drei`
-- **Icons:** Lucide React
-- **Markdown:** React Markdown for blog-style content cards
-- **Effects:** Canvas Confetti, Web Audio API, Matrix rain canvas effects
-- **UI primitives:** Local shadcn-style components under `src/components/ui`
+---
 
-## Project Structure
+## `> SYSTEM_FEATURES.log`
 
-```text
+```
+[ONLINE]  Interactive terminal — portfolio commands + natural language
+[ONLINE]  Retro terminal themes — default, cyber-green, amber-decay, monochrome
+[ONLINE]  Matrix rain hero background with animated canvas
+[ONLINE]  ASCII terminal face render panel — animated, theme-aware
+[ONLINE]  Embedded Snake mini-game  (terminal cmd: play)
+[ONLINE]  Terminal matrix overlay mode  (terminal cmd: matrix)
+[ONLINE]  Web Audio API — synthesized keystroke + UI feedback
+[ONLINE]  Lenis smooth scroll engine
+[ONLINE]  Dark / light theme toggle with localStorage persistence
+[ONLINE]  Blinking >_ favicon — theme-aware color switching
+[ONLINE]  Scroll progress bar — GPU-accelerated scaleX transform
+```
+
+---
+
+## `> TECH_STACK.json`
+
+```json
+{
+  "framework": "React 19 + Vite 6 + TypeScript",
+  "styling": "Tailwind CSS v4 — neo-brutalist utility system",
+  "animation": "Motion for React + Lenis",
+  "3d": "Three.js + @react-three/fiber + @react-three/drei",
+  "icons": "Lucide React",
+  "markdown": "React Markdown",
+  "effects": "Canvas Confetti + Web Audio API + Matrix Canvas",
+  "ui": "Local shadcn-style primitives — src/components/ui"
+}
+```
+
+---
+
+## `> DIRECTORY_MAP.sys`
+
+```
 .
 ├── src
-│   ├── App.tsx                 # Main page composition and section order
-│   ├── constants.ts            # Resume, skills, projects, education, and contact data
-│   ├── index.css               # Tailwind theme, global styles, terminal themes
-│   ├── main.tsx                # React entry point
+│   ├── App.tsx                       # Page composition and section layout
+│   ├── constants.ts                  # All resume data — edit this to update content
+│   ├── index.css                     # Theme system, global styles, terminal themes
+│   ├── main.tsx                      # Entry point
 │   ├── components
-│   │   ├── Hero.tsx            # Matrix hero, identity block, social links, terminal
-│   │   ├── Terminal.tsx        # Interactive portfolio terminal
-│   │   ├── BootLoader.tsx      # Terminal boot sequence
-│   │   ├── TerminalSnake.tsx   # Snake mini-game overlay
-│   │   ├── TerminalMatrixOverlay.tsx
-│   │   ├── Hero3D.tsx          # React Three Fiber render panel
-│   │   ├── Navbar.tsx          # Navigation, theme toggle, audio toggle, progress bar
+│   │   ├── Hero.tsx                  # Matrix hero + identity block + social links
+│   │   ├── Terminal.tsx              # Interactive portfolio terminal
+│   │   ├── BootLoader.tsx            # Terminal boot animation
+│   │   ├── TerminalSnake.tsx         # Snake mini-game overlay
+│   │   ├── TerminalMatrixOverlay.tsx # Matrix rain terminal overlay
+│   │   ├── Hero3D.tsx                # WebGL wireframe — React Three Fiber
+│   │   ├── Navbar.tsx                # Nav + theme toggle + audio + scroll bar
 │   │   ├── Experience.tsx
 │   │   ├── Skills.tsx
 │   │   ├── Projects.tsx
 │   │   ├── Education.tsx
 │   │   ├── Contact.tsx
-│   │   └── ui                  # Reusable UI components
+│   │   └── ui/                       # Reusable UI primitives
 │   └── lib
-│       ├── audio.ts            # Synthesized terminal sounds
-│       └── utils.ts            # Utility helpers
+│       ├── audio.ts                  # Synthesized sound engine
+│       └── utils.ts
+├── .github/workflows/vercel.yml      # CI/CD pipeline
+├── public/                           # Static assets
 ├── index.html
 ├── vite.config.ts
 ├── package.json
 └── README.md
 ```
 
-## Getting Started
+---
 
-### Prerequisites
+## `> BOOT_SEQUENCE — Getting Started`
 
-- Node.js 18 or newer
-- npm
+**Prerequisites**
 
-### Installation
+```
+Node.js >= 18
+npm
+```
+
+**Install**
 
 ```bash
 npm install
 ```
 
-### Environment Variables
-
-No environment variables are required for the current portfolio UI.
-
-### Run Locally
+**Run locally**
 
 ```bash
 npm run dev
+# http://localhost:3000
 ```
 
-The Vite dev server is configured to run on:
-
-```text
-http://localhost:3000
-```
-
-### Build
+**Build**
 
 ```bash
 npm run build
 ```
 
-### Preview Production Build
+**Preview production build**
 
 ```bash
 npm run preview
 ```
 
-### Type Check
+**Type check**
 
 ```bash
 npm run type-check
 ```
 
-This project uses `npm run type-check` for TypeScript checking and `npm run lint` for ESLint.
+**Lint**
 
-### Test
+```bash
+npm run lint
+```
+
+**Test**
 
 ```bash
 npm run test
 ```
 
-### Format
+**Format**
 
 ```bash
 npm run format
 ```
 
-## Editing Portfolio Content
+---
 
-Most portfolio content is stored in `src/constants.ts`.
+## `> TERMINAL_COMMANDS.db`
 
-Update this file to change:
-
-- Name, role, email, phone, and LinkedIn URL
-- Professional summary
-- Experience entries and achievements
-- Skill categories
-- Project cards and details
-- Education history
-- Certifications
-
-The blog-style writing cards are currently defined inside `src/App.tsx` as the `blogPosts` array.
-
-## Terminal Commands
-
-The terminal is one of the main interaction surfaces of the portfolio.
-
-Useful commands include:
-
-```text
-help                  Show available commands
-ls                    List virtual portfolio files
-cat about.txt         Read profile summary
-cat skills.json       Read skills as JSON-style output
-cat projects.md       Read project summaries
-cat experience.md     Read work experience
-cat contact.cfg       Read contact details
-about / whoami        Show profile information
-skills                Show technical stack
-projects              Show portfolio projects
-experience            Show work history
-contact               Show contact channels
-theme default         Reset terminal theme
-theme cyber-green     Switch to green terminal theme
-theme amber-decay     Switch to amber terminal theme
-theme monochrome      Switch to black-and-white terminal theme
-matrix [word]         Launch terminal matrix overlay
-play / snake / game   Launch Snake mini-game
-clear                 Clear terminal history
-exit                  Print session close message
+```
+help                   List all available commands
+ls                     List virtual portfolio files
+cat about.txt          Profile summary
+cat skills.json        Skills in JSON format
+cat projects.md        Project summaries
+cat experience.md      Work history
+cat contact.cfg        Contact configuration
+about / whoami         Identity reveal
+skills                 Full tech stack readout
+projects               Project archive
+experience             Work history log
+contact                Communication channels
+theme default          Reset to default theme
+theme cyber-green      Phosphor green CRT mode
+theme amber-decay      Amber CRT decay mode
+theme monochrome       High-contrast black/white mode
+matrix [word]          Launch digital rain overlay
+play / snake / game    Launch Snake mini-game
+clear                  Wipe terminal history
+exit                   Terminate session
 ```
 
-The terminal also supports natural prompts such as asking about skills, projects, experience, or contact information.
+Natural language works too — ask about skills, projects, or experience directly.
 
-## Deployment
+---
 
-This is a static Vite React application. After running:
+## `> CONTENT_EDIT.cfg`
 
-```bash
-npm run build
+All portfolio content lives in **`src/constants.ts`**.
+
+Update it to change:
+
+```
+name, role, email, phone, linkedin, resumeUrl
+summary
+experience  →  title, company, period, achievements
+skills      →  languages, frameworks, databases, tools, devops
+projects    →  title, description, details
+education
+certifications
 ```
 
-deploy the generated `dist` directory to any static hosting provider such as Vercel, Netlify, Cloudflare Pages, GitHub Pages, or a static file server.
+Blog posts are in the `blogPosts` array inside `src/App.tsx`.
 
-## CI/CD with Vercel
+---
 
-This repository includes a GitHub Actions workflow at `.github/workflows/vercel.yml`.
+## `> SYSTEM_NOTES.txt`
 
-The pipeline runs on:
-
-- Pull requests to `main`: type-checks, builds, and deploys a Vercel preview.
-- Pushes to `main`: type-checks, builds, and deploys to Vercel production.
-
-Add these secrets in GitHub under **Settings > Secrets and variables > Actions**:
-
-```text
-VERCEL_TOKEN
-VERCEL_ORG_ID
-VERCEL_PROJECT_ID
+```
+[INFO] Contact form is client-side only — no backend connected
+[INFO] Audio via Web Audio API — mute toggle available in navbar
+[INFO] Theme + audio preferences persisted in localStorage
+[INFO] Favicon blinks >_ and adapts colors to active theme
+[INFO] Resume button links to /public/resume.pdf — replace with your file
+[INFO] GitHub activity graph → manjunathanchettiar2908
 ```
 
-You can get them by linking the project with the Vercel CLI:
+---
 
-```bash
-npx vercel login
-npx vercel link
 ```
-
-After linking, Vercel creates `.vercel/project.json`. Use its `orgId` and `projectId` values for the GitHub secrets, and create `VERCEL_TOKEN` from the Vercel dashboard under account tokens.
-
-## Notes
-
-- The contact form currently simulates submission in the browser and does not send messages to a backend service.
-- Audio feedback is generated with the Web Audio API and can be muted from the navbar.
-- Theme and audio preferences are persisted in browser local storage.
-- GitHub graph and profile links point to `manjunathanchettiar2908`.
+[MJOS v1.0] > SESSION COMPLETE
+[MJOS v1.0] > ALL SYSTEMS NOMINAL
+[MJOS v1.0] > SHUTTING DOWN......... ████████████ DONE
+```

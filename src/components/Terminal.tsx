@@ -752,10 +752,10 @@ export default function Terminal() {
           <TerminalIcon className="size-4 shrink-0 animate-pulse" />
           <span className="text-xs font-bold font-mono">manjunathan@chettiar-os:~</span>
         </div>
-        <div className="flex items-center gap-1">
-          <span className={`size-2 rounded-full border ${t.indicatorBorder} opacity-40 inline-block`} />
-          <span className={`size-2 rounded-full border ${t.indicatorBorder} opacity-40 inline-block`} />
-          <span className={`size-2 rounded-full border ${t.indicatorBorder} opacity-40 inline-block`} />
+        <div className="flex items-center gap-1.5">
+          <span className="size-2.5 rounded-full bg-red-500 inline-block" title="Close" />
+          <span className="size-2.5 rounded-full bg-yellow-400 inline-block" title="Minimize" />
+          <span className="size-2.5 rounded-full bg-green-500 inline-block" title="Maximize" />
         </div>
       </div>
 
