@@ -9,4 +9,3 @@ coverage/
 
 .vercel
 .env*
-.github/workflows/vercel.yml
