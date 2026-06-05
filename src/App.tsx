@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { motion } from 'motion/react';
 import { RESUME_DATA } from '@/src/constants';
 import Navbar from '@/src/components/Navbar';
-import BlogPostCard from '@/src/components/BlogPostCard';
+// import BlogPostCard from '@/src/components/BlogPostCard'; // blog section disabled
 import Hero from '@/src/components/Hero';
 import Experience from '@/src/components/Experience';
 import Skills from '@/src/components/Skills';
@@ -14,7 +14,8 @@ import Hero3D from '@/src/components/Hero3D';
 import { HelpCircle } from 'lucide-react';
 import Lenis from 'lenis';
 
-const blogPosts = [
+// Blog posts — kept for future use, section currently disabled
+/* const blogPosts = [
   {
     title: "Optimizing LLM Latency with Asynchronous Task Queues",
     date: "March 15, 2026",
@@ -100,7 +101,7 @@ gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.03);
 This delivers high-fidelity sound with exactly zero bytes of network transport!
     `
   }
-];
+]; */
 
 export default function App() {
   useEffect(() => {
@@ -232,11 +233,9 @@ export default function App() {
         <Projects />
         <Education />
 
-        {/* Neo-brutalist Technical Blog Section */}
+        {/* Neo-brutalist Technical Blog Section — commented out, not in use
         <section id="blog" className="py-[var(--spacing-section)] border-t-[3px] border-primary">
           <div className="container mx-auto px-6">
-            
-            {/* Header */}
             <div className="max-w-4xl mx-auto mb-16">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -255,16 +254,14 @@ export default function App() {
                 </p>
               </motion.div>
             </div>
-
-            {/* Brutalist Blog Posts Container */}
             <div className="max-w-4xl mx-auto space-y-12">
               {blogPosts.map((post, index) => (
                 <BlogPostCard key={index} post={post} index={index} />
               ))}
             </div>
-
           </div>
         </section>
+        */}
 
         {/* Dynamic Comms Channel */}
         <Contact />

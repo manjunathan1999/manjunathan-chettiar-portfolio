@@ -81,6 +81,8 @@ export default function Terminal() {
   const [terminalMode, setTerminalMode] = useState<'normal' | 'matrix' | 'snake'>('normal');
   const [matrixCustomWord, setMatrixCustomWord] = useState<string | undefined>(undefined);
   const [isBooting, setIsBooting] = useState(true);
+  const [isSudoWipe, setIsSudoWipe] = useState(false);
+  const [sudoLines, setSudoLines] = useState<string[]>([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -452,24 +454,74 @@ export default function Terminal() {
         output = getCommandResponse('contact');
         break;
 
-      case 'github':
-        const username = args[1] || 'manjunathanchettiar2908';
-        output = (
+      case 'github': {
+        const username = args[1] || 'manjunathan1999';
+        // Show loading state immediately
+        const githubLoadingOutput = (
           <div className="space-y-2 text-xs sm:text-sm font-mono my-2 p-2 bg-secondary border border-primary/20">
-            <p className="text-primary font-bold flex items-center gap-2">
+            <p className="text-primary font-bold flex items-center gap-2 animate-pulse">
               <Sparkles className="size-4 text-primary animate-pulse" />
-              RETRIEVING META FOR: github.com/{username}...
+              CONNECTING TO GITHUB API: github.com/{username}...
             </p>
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              <div><span className="opacity-70">Repositories:</span> 24 public</div>
-              <div><span className="opacity-70">Followers:</span> 82 engineers</div>
-              <div><span className="opacity-70">Contributions (YTD):</span> 418 commits</div>
-              <div><span className="opacity-70">Main Stack:</span> Python, Go, Docker</div>
-            </div>
-            <p className="text-[10px] text-muted-foreground italic mt-2">Fetched using localized cache configuration.</p>
           </div>
         );
+        output = githubLoadingOutput;
+
+        // Fetch live data and update the last history entry
+        const ghToken = import.meta.env.VITE_GITHUB_TOKEN;
+        const ghHeaders: HeadersInit = ghToken ? { Authorization: `Bearer ${ghToken}` } : {};
+        fetch(`https://api.github.com/users/${username}`, { headers: ghHeaders })
+          .then(r => {
+            if (!r.ok) throw new Error('User not found');
+            return r.json();
+          })
+          .then(data => {
+            const liveOutput = (
+              <div className="space-y-2 text-xs sm:text-sm font-mono my-2 p-2 bg-secondary border border-primary/20">
+                <p className="text-primary font-bold flex items-center gap-2">
+                  <Sparkles className="size-4 text-primary" />
+                  LIVE DATA: github.com/{data.login}
+                </p>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div><span className="opacity-70">Repositories:</span> <span className="font-bold">{data.public_repos} public</span></div>
+                  <div><span className="opacity-70">Followers:</span> <span className="font-bold">{data.followers} engineers</span></div>
+                  <div><span className="opacity-70">Following:</span> <span className="font-bold">{data.following}</span></div>
+                  <div><span className="opacity-70">Name:</span> <span className="font-bold">{data.name || data.login}</span></div>
+                </div>
+                {data.bio && <p className="text-[10px] text-muted-foreground italic mt-1">{data.bio}</p>}
+                <p className="text-[10px] text-green-500 font-bold mt-1">✓ Live data — GitHub REST API</p>
+              </div>
+            );
+            setHistory(prev => {
+              const updated = [...prev];
+              updated[updated.length - 1] = { ...updated[updated.length - 1], output: liveOutput };
+              return updated;
+            });
+          })
+          .catch(() => {
+            const fallbackOutput = (
+              <div className="space-y-2 text-xs sm:text-sm font-mono my-2 p-2 bg-secondary border border-primary/20">
+                <p className="text-primary font-bold flex items-center gap-2">
+                  <Sparkles className="size-4 text-primary" />
+                  CACHED DATA: github.com/{username}
+                </p>
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div><span className="opacity-70">Repositories:</span> 24 public</div>
+                  <div><span className="opacity-70">Followers:</span> 82 engineers</div>
+                  <div><span className="opacity-70">Following:</span> 38</div>
+                  <div><span className="opacity-70">Main Stack:</span> Python, Go, Docker</div>
+                </div>
+                <p className="text-[10px] text-yellow-500 font-bold mt-1">⚠ API rate limited — showing cached data</p>
+              </div>
+            );
+            setHistory(prev => {
+              const updated = [...prev];
+              updated[updated.length - 1] = { ...updated[updated.length - 1], output: fallbackOutput };
+              return updated;
+            });
+          });
         break;
+      }
 
       case 'theme':
         const selectedTheme = args[1];
@@ -517,6 +569,10 @@ export default function Terminal() {
       case 'snake':
       case 'play':
         setTimeout(() => {
+          // Blur any focused input so mobile keyboard dismisses before game opens
+          if (document.activeElement instanceof HTMLElement) {
+            document.activeElement.blur();
+          }
           setTerminalMode('snake');
         }, 120);
         output = (
@@ -524,6 +580,61 @@ export default function Terminal() {
             <span>Loading retroactive 8-bit snake portable emulator logic bundle...</span>
           </div>
         );
+        break;
+
+      case 'sudo':
+        if (args.slice(1).join(' ') === 'rm -rf /') {
+          output = (
+            <div className="text-destructive font-mono text-xs animate-pulse font-bold">
+              [MJOS v1.0] EXECUTING: sudo rm -rf / ... ROOT ACCESS GRANTED
+            </div>
+          );
+          // Trigger wipe sequence after short delay
+          setTimeout(() => {
+            const wipeLog = [
+              'removing /bin ...',
+              'removing /etc ...',
+              'removing /home/manjunathan ...',
+              'removing /var/log ...',
+              'removing /usr ...',
+              'removing /lib ...',
+              'removing /proc ...',
+              'removing /root ...',
+              'WARNING: system integrity compromised',
+              'WARNING: kernel panic imminent',
+              'FATAL: cannot remove running process',
+              '████████████████████ WIPING ████████████████████',
+              'MJOS v1.0 SYSTEM FAILURE',
+              'rebooting in 3...',
+              'rebooting in 2...',
+              'rebooting in 1...',
+              'REBOOTING MJOS v1.0...',
+            ];
+            setIsSudoWipe(true);
+            setSudoLines([]);
+            let i = 0;
+            const interval = setInterval(() => {
+              if (i < wipeLog.length) {
+                setSudoLines(prev => [...prev, wipeLog[i]]);
+                try { audioSystem.playError(); } catch (_) {}
+                i++;
+              } else {
+                clearInterval(interval);
+                // Reboot — reload the page for a true system restart feel
+                setTimeout(() => {
+                  window.location.reload();
+                }, 800);
+              }
+            }, 180);
+          }, 400);
+        } else {
+          output = (
+            <div className="text-destructive font-mono text-xs">
+              Permission denied. Nice try. Try: <span className="font-bold text-primary">sudo rm -rf /</span>
+            </div>
+          );
+          isError = true;
+        }
         break;
 
       case 'exit':
@@ -568,12 +679,28 @@ export default function Terminal() {
   };
 
   // Suggestion autocomplete engine
-  const COMMANDS = ['help', 'whoami', 'skills', 'projects', 'experience', 'contact', 'github', 'theme', 'matrix', 'game', 'snake', 'clear', 'ls', 'cat', 'about', 'play', 'exit', 'hello', 'hi', 'hey', 'yo'];
+  const COMMANDS = ['help', 'whoami', 'skills', 'projects', 'experience', 'contact', 'github', 'theme', 'matrix', 'game', 'snake', 'clear', 'ls', 'cat', 'about', 'play', 'exit', 'hello', 'hi', 'hey', 'yo', 'sudo'];
+  const CAT_FILES = ['about.txt', 'skills.json', 'projects.md', 'experience.md', 'contact.cfg'];
   const trimmedInput = inputVal.trim().toLowerCase();
-  const matchedCmd = COMMANDS.find((c) => c.startsWith(trimmedInput));
-  const suggestion = matchedCmd && trimmedInput && matchedCmd !== trimmedInput
-    ? matchedCmd.slice(trimmedInput.length)
+
+  // Tab-complete `cat <filename>` — e.g. "cat ab" → "cat about.txt"
+  const isCatPartial = trimmedInput.startsWith('cat ');
+  const catArg = isCatPartial ? trimmedInput.slice(4) : '';
+  const matchedFile = isCatPartial && catArg
+    ? CAT_FILES.find(f => f.startsWith(catArg))
+    : null;
+  const catFileSuggestion = matchedFile && matchedFile !== catArg
+    ? matchedFile.slice(catArg.length)
     : '';
+
+  const matchedCmd = !isCatPartial
+    ? COMMANDS.find((c) => c.startsWith(trimmedInput))
+    : null;
+  const suggestion = catFileSuggestion
+    ? catFileSuggestion
+    : (matchedCmd && trimmedInput && matchedCmd !== trimmedInput
+        ? matchedCmd.slice(trimmedInput.length)
+        : '');
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (isTyping) {
@@ -842,6 +969,30 @@ export default function Terminal() {
           >
             [clear]
           </button>
+        </div>
+      )}
+
+      {/* Sudo wipe overlay — contained inside terminal box */}
+      {isSudoWipe && (
+        <div className="absolute inset-0 z-50 bg-black flex flex-col p-4 font-mono text-xs overflow-hidden">
+          <div className="space-y-1">
+            {sudoLines.map((line, i) => (
+              <div
+                key={i}
+                className={`${
+                  line.includes('FATAL') || line.includes('WARNING') || line.includes('FAILURE')
+                    ? 'text-red-500 font-bold animate-pulse'
+                    : line.includes('████')
+                      ? 'text-white font-black tracking-widest text-sm'
+                      : line.includes('rebooting') || line.includes('REBOOTING')
+                        ? 'text-yellow-400 font-bold'
+                        : 'text-green-400'
+                }`}
+              >
+                {line.includes('████') ? line : `> ${line}`}
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

@@ -14,8 +14,8 @@ interface GitHubProfile {
 }
 
 export default function GithubGraph() {
-  const [username, setUsername] = useState('manjunathanchettiar2908');
-  const [searchInput, setSearchInput] = useState('manjunathanchettiar2908');
+  const [username, setUsername] = useState('manjunathan1999');
+  const [searchInput, setSearchInput] = useState('manjunathan1999');
   const [profile, setProfile] = useState<GitHubProfile | null>(null);
   const [loading, setLoading] = useState(false);
   const [usingCache, setUsingCache] = useState(false);
@@ -24,11 +24,11 @@ export default function GithubGraph() {
   const fetchGitHubUser = async (user: string) => {
     setLoading(true);
     setUsingCache(false);
+    const token = import.meta.env.VITE_GITHUB_TOKEN;
+    const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
     try {
-      const res = await fetch(`https://api.github.com/users/${user}`);
-      if (!res.ok) {
-        throw new Error('User not found on GitHub');
-      }
+      const res = await fetch(`https://api.github.com/users/${user}`, { headers });
+      if (!res.ok) throw new Error('User not found on GitHub');
       const data = await res.json();
       setProfile({
         login: data.login,

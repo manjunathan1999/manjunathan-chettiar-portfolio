@@ -60,7 +60,7 @@ export default function Projects() {
                       <FolderCode className="h-5 w-5" />
                     </div>
                     <a
-                      href="https://github.com/manjunathanchettiar2908"
+                      href="https://github.com/manjunathan1999"
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={() => audioSystem.playClick()}

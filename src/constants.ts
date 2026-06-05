@@ -42,11 +42,11 @@ export const RESUME_DATA = {
   },
   projects: [
     {
-      title: "Anomaly Detection",
-      description: "Architected and deployed an anomaly detection system using Python and SQL with Elasticsearch, reducing security risks by 30% through automated log monitoring.",
+      title: "Intelligent Event Stream Pipeline using Ollama",
+      description: "Built an intelligent event stream pipeline with Ollama LLM integration, summarizing 10k+ daily event logs into contextual insights with >90% accuracy.",
       details: [
-        "Integrated multi-database pipelines (MySQL, SQLite, Elasticsearch) to consolidate 1M+ records.",
-        "Automated anomaly detection with Python scripts, reducing manual review effort by 40%."
+        "Engineered modular pipeline architecture with dynamic config management, enabling flexible deployment across multiple LLM models.",
+        "Supports storing and retrieving chat interactions in Elasticsearch, Redis, and file storage."
       ]
     },
     {
@@ -73,14 +73,14 @@ export const RESUME_DATA = {
         "Conducted exploratory data analysis to identify trends and seasonality in employee data."
       ]
     },
-    {
-      title: "Intelligent Event Stream Pipeline using Ollama",
-      description: "Built an intelligent event stream pipeline with Ollama LLM integration, summarizing 10k+ daily event logs into contextual insights with >90% accuracy.",
-      details: [
-        "Engineered modular pipeline architecture with dynamic config management, enabling flexible deployment across multiple LLM models.",
-        "Supports storing and retrieving chat interactions in Elasticsearch, Redis, and file storage."
-      ]
-    }
+    // {
+    //   title: "Anomaly Detection",
+    //   description: "Architected and deployed an anomaly detection system using Python and SQL with Elasticsearch, reducing security risks by 30% through automated log monitoring.",
+    //   details: [
+    //     "Integrated multi-database pipelines (MySQL, SQLite, Elasticsearch) to consolidate 1M+ records.",
+    //     "Automated anomaly detection with Python scripts, reducing manual review effort by 40%."
+    //   ]
+    // },
   ],
   education: [
     {

@@ -221,7 +221,7 @@ Blog posts are in the `blogPosts` array inside `src/App.tsx`.
 [INFO] Theme + audio preferences persisted in localStorage
 [INFO] Favicon blinks >_ and adapts colors to active theme
 [INFO] Resume button links to /public/resume.pdf — replace with your file
-[INFO] GitHub activity graph → manjunathanchettiar2908
+[INFO] GitHub activity graph → manjunathan1999
 ```
 
 ---

@@ -116,7 +116,7 @@ export default function Hero() {
               <Linkedin className="size-4 sm:size-5" />
             </a>
             <a 
-              href="https://github.com/manjunathanchettiar2908"
+              href="https://github.com/manjunathan1999"
               target="_blank" 
               rel="noopener noreferrer"
               onClick={() => audioSystem.playClick()}

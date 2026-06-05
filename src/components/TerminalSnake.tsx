@@ -251,10 +251,13 @@ export default function TerminalSnake({ theme, onExit }: TerminalSnakeProps) {
   const MobileControllerButton = ({ dir, label }: { dir: Direction, label: string }) => {
     return (
       <button
-        onClick={(e) => {
+        onPointerDown={(e) => {
+          e.preventDefault(); // prevents focus and keyboard popup on mobile
           e.stopPropagation();
           changeDirection(dir);
+          try { audioSystem.playKeystroke(); } catch (err) {}
         }}
+        tabIndex={-1}
         className={`w-10 h-10 border border-primary font-bold text-xs select-none active:scale-95 transition-transform flex items-center justify-center cursor-pointer ${css.btnStyle}`}
       >
         {label}
