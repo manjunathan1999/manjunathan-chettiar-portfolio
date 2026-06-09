@@ -11,6 +11,7 @@ import Education from '@/src/components/Education';
 import Contact from '@/src/components/Contact';
 import Footer from '@/src/components/Footer';
 import Hero3D from '@/src/components/Hero3D';
+import CursorTrail from '@/src/components/CursorTrail';
 import { HelpCircle } from 'lucide-react';
 import Lenis from 'lenis';
 
@@ -151,6 +152,9 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen bg-background text-primary selection:bg-primary selection:text-primary-foreground overflow-x-hidden">
+      {/* Matrix cursor trail effect */}
+      <CursorTrail />
+      
       {/* Blinking CRT Scanline Overlay */}
       <div className="scanline" />
       

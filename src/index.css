@@ -260,3 +260,12 @@ body::-webkit-scrollbar,
 
 
 
+
+/* Custom cursor — hide default, show a glowing terminal dot */
+* {
+  cursor: none !important;
+}
+
+a, button, [role="button"], input, textarea, select, label {
+  cursor: none !important;
+}
