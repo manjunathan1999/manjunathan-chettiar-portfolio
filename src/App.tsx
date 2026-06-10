@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { motion } from 'motion/react';
 import { RESUME_DATA } from '@/src/constants';
 import Navbar from '@/src/components/Navbar';
@@ -12,6 +12,7 @@ import Contact from '@/src/components/Contact';
 import Footer from '@/src/components/Footer';
 import Hero3D from '@/src/components/Hero3D';
 import CursorTrail from '@/src/components/CursorTrail';
+import CRTPowerOn from '@/src/components/CRTPowerOn';
 import { HelpCircle } from 'lucide-react';
 import Lenis from 'lenis';
 
@@ -105,6 +106,9 @@ This delivers high-fidelity sound with exactly zero bytes of network transport!
 ]; */
 
 export default function App() {
+  const [showCRT, setShowCRT] = useState(true);
+  const handleCRTComplete = useCallback(() => setShowCRT(false), []);
+
   useEffect(() => {
     // Initialise Lenis smooth scroll
     const lenis = new Lenis({
@@ -152,6 +156,9 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen bg-background text-primary selection:bg-primary selection:text-primary-foreground overflow-x-hidden">
+      {/* CRT Power-On Effect */}
+      {showCRT && <CRTPowerOn onComplete={handleCRTComplete} />}
+
       {/* Matrix cursor trail effect */}
       <CursorTrail />
       
