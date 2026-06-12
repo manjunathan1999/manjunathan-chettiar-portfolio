@@ -1,32 +1,61 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion } from 'motion/react';
-import { Send, Mail, Phone, MapPin, CheckSquare, Sparkles } from 'lucide-react';
+import { Send, Mail, Phone, MapPin, Sparkles } from 'lucide-react';
 import { RESUME_DATA } from '@/src/constants';
 import confetti from 'canvas-confetti';
 import { audioSystem } from '@/src/lib/audio';
 
+// Formspree endpoint — set VITE_FORMSPREE_ID in .env.local
+const FORMSPREE_URL = `https://formspree.io/f/${import.meta.env.VITE_FORMSPREE_ID || 'YOUR_FORM_ID'}`;
+
 export default function Contact() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null);
     audioSystem.playClick();
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    audioSystem.playSuccess();
-    
-    confetti({
-      particleCount: 120,
-      spread: 80,
-      origin: { y: 0.6 },
-      colors: ['#000000', '#ffffff', '#888888']
-    });
+
+    const form = formRef.current;
+    if (!form) return;
+
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        setIsSubmitted(true);
+        audioSystem.playSuccess();
+        form.reset();
+
+        confetti({
+          particleCount: 120,
+          spread: 80,
+          origin: { y: 0.6 },
+          colors: ['#000000', '#ffffff', '#888888'],
+        });
+      } else {
+        const data = await response.json();
+        setError(data?.errors?.[0]?.message || 'Transmission failed. Try again.');
+        audioSystem.playError();
+      }
+    } catch (_) {
+      setError('Network error. Check your connection and try again.');
+      audioSystem.playError();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -115,12 +144,13 @@ export default function Contact() {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-6 font-mono">
+                <form ref={formRef} onSubmit={handleSubmit} className="space-y-6 font-mono">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase text-primary">Your Name *</label>
                       <input
                         type="text"
+                        name="name"
                         placeholder="e.g. John Doe"
                         required
                         onInput={() => audioSystem.playKeystroke()}
@@ -131,6 +161,7 @@ export default function Contact() {
                        <label className="text-xs font-bold uppercase text-primary">Your Email *</label>
                       <input
                         type="email"
+                        name="email"
                         placeholder="e.g. john@domain.com"
                         required
                         onInput={() => audioSystem.playKeystroke()}
@@ -142,6 +173,7 @@ export default function Contact() {
                     <label className="text-xs font-bold uppercase text-primary">Subject Track *</label>
                     <input
                       type="text"
+                      name="subject"
                       placeholder="e.g. Backend Architecture Inquiry"
                       required
                       onInput={() => audioSystem.playKeystroke()}
@@ -151,12 +183,20 @@ export default function Contact() {
                   <div className="space-y-2">
                     <label className="text-xs font-bold uppercase text-primary">Secure Signal Message *</label>
                     <textarea
+                      name="message"
                       placeholder="Tell me about your architectural project objectives..."
                       onInput={() => audioSystem.playKeystroke()}
                       className="w-full min-h-[140px] border-neo bg-background text-primary px-3 py-2 text-sm font-bold focus:outline-none focus:ring-0 rounded-none shadow-neo-sm hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all"
                       required
                     />
                   </div>
+
+                  {/* Error message */}
+                  {error && (
+                    <div className="text-xs font-mono text-red-500 border border-red-500 bg-red-500/10 px-3 py-2">
+                      ⚠ {error}
+                    </div>
+                  )}
                   
                   {/* Brutalist Button */}
                   <button
