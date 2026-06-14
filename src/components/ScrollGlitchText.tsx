@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 interface ScrollGlitchTextProps {
   text: string;
@@ -12,31 +12,11 @@ export default function ScrollGlitchText({ text, className = '' }: ScrollGlitchT
   const [isGlitching, setIsGlitching] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
   const wasVisible = useRef(false);
+  const isGlitchingRef = useRef(false);
 
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !wasVisible.current) {
-          // Just entered viewport
-          wasVisible.current = true;
-          startScramble();
-        } else if (!entry.isIntersecting) {
-          // Left viewport — reset so it can trigger again next time
-          wasVisible.current = false;
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [text]);
-
-  function startScramble() {
-    if (isGlitching) return;
+  const startScramble = useCallback(() => {
+    if (isGlitchingRef.current) return;
+    isGlitchingRef.current = true;
     setIsGlitching(true);
 
     // Start scrambled
@@ -70,9 +50,30 @@ export default function ScrollGlitchText({ text, className = '' }: ScrollGlitchT
         clearInterval(interval);
         setDisplayText(text);
         setIsGlitching(false);
+        isGlitchingRef.current = false;
       }
     }, speed);
-  }
+  }, [text]);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !wasVisible.current) {
+          wasVisible.current = true;
+          startScramble();
+        } else if (!entry.isIntersecting) {
+          wasVisible.current = false;
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [text, startScramble]);
 
   return (
     <span
