@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { useState, useEffect } from 'react';
 import { ArrowDown, FileText, Github, Linkedin, Mail, Sparkles, Terminal as TerminalIcon } from 'lucide-react';
 import { RESUME_DATA } from '@/src/constants';
@@ -8,21 +8,46 @@ import GlitchText from '@/src/components/GlitchText';
 import { audioSystem } from '@/src/lib/audio';
 
 export default function Hero() {
+  const [displayText, setDisplayText] = useState('');
   const [roleIndex, setRoleIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
   const roles = [
     'Back-end Software Engineer',
     'Computer Vision Engineer',
     'AI/ML Developer',
     'Vibecoder',
-    'Content Creator'
+    'Tech Content Creator'
   ];
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setRoleIndex((prev) => (prev + 1) % roles.length);
-    }, 3000);
-    return () => clearInterval(timer);
-  }, []);
+    const currentRole = roles[roleIndex];
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (!isDeleting) {
+      // Typing
+      if (displayText.length < currentRole.length) {
+        timeout = setTimeout(() => {
+          setDisplayText(currentRole.slice(0, displayText.length + 1));
+        }, 80);
+      } else {
+        // Pause at full text before deleting
+        timeout = setTimeout(() => setIsDeleting(true), 2000);
+      }
+    } else {
+      // Deleting
+      if (displayText.length > 0) {
+        timeout = setTimeout(() => {
+          setDisplayText(displayText.slice(0, -1));
+        }, 40);
+      } else {
+        // Move to next role
+        setIsDeleting(false);
+        setRoleIndex((prev) => (prev + 1) % roles.length);
+      }
+    }
+
+    return () => clearTimeout(timeout);
+  }, [displayText, isDeleting, roleIndex]);
 
   return (
     <section className="relative min-h-screen flex flex-col justify-center items-center pt-24 pb-36 sm:pb-40 lg:py-16 px-4 overflow-hidden border-b-[4px] border-primary">
@@ -70,18 +95,10 @@ export default function Hero() {
             {/* Technical monospaced title tag - Dynamic Cycler */}
             <div className="bg-secondary text-primary border-neo px-3 py-1.5 font-mono text-xs font-bold uppercase tracking-widest w-fit min-w-[240px] shadow-neo-sm h-8 flex items-center relative overflow-hidden select-text">
               <span className="mr-2 text-primary/80 select-none">&gt;</span>
-              <AnimatePresence mode="wait">
-                <motion.span
-                  key={roleIndex}
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
-                  transition={{ duration: 0.25, ease: 'easeInOut' }}
-                  className="font-mono text-xs font-bold whitespace-nowrap block"
-                >
-                  {roles[roleIndex]}
-                </motion.span>
-              </AnimatePresence>
+              <span className="font-mono text-xs font-bold whitespace-nowrap">
+                {displayText}
+              </span>
+              <span className="inline-block w-[2px] h-4 bg-primary ml-0.5 animate-[blink_0.8s_step-end_infinite]" />
             </div>
 
             {/* Brief introductory text */}
