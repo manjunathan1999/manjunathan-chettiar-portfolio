@@ -3,6 +3,7 @@ import { ExternalLink, FolderCode, ArrowUpRight } from 'lucide-react';
 import { RESUME_DATA } from '@/src/constants';
 import GithubGraph from '@/src/components/GithubGraph';
 import { audioSystem } from '@/src/lib/audio';
+import ScrollGlitchText from '@/src/components/ScrollGlitchText';
 
 export default function Projects() {
   return (
@@ -21,7 +22,7 @@ export default function Projects() {
               INDEX_04 // WORK_PORTFOLIO
             </div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tighter uppercase font-heading text-primary">
-              Project Experiences
+              <ScrollGlitchText text="Project Experiences" />
             </h2>
             <p className="text-sm sm:text-base text-muted-foreground font-mono leading-relaxed max-w-2xl">
               An index of built microservices, computer vision pipelines, anomaly filtering mechanisms, and localized LLM stream utilities.

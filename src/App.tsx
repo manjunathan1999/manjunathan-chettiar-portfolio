@@ -13,6 +13,8 @@ import Footer from '@/src/components/Footer';
 import Hero3D from '@/src/components/Hero3D';
 import CursorTrail from '@/src/components/CursorTrail';
 import CRTPowerOn from '@/src/components/CRTPowerOn';
+import GlitchDivider from '@/src/components/GlitchDivider';
+import ScrollGlitchText from '@/src/components/ScrollGlitchText';
 import { HelpCircle } from 'lucide-react';
 import Lenis from 'lenis';
 
@@ -190,7 +192,7 @@ export default function App() {
                   </div>
                   
                   <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold uppercase font-heading text-primary leading-none">
-                    About the Architect
+                    <ScrollGlitchText text="About the Architect" />
                   </h2>
                   
                   <div className="font-mono text-xs sm:text-sm text-muted-foreground leading-relaxed space-y-4">
@@ -239,9 +241,13 @@ export default function App() {
         </section>
 
         {/* Chronological Logs, Stack Metrics, and Portfolios */}
+        <GlitchDivider />
         <Experience />
+        <GlitchDivider />
         <Skills />
+        <GlitchDivider />
         <Projects />
+        <GlitchDivider />
         <Education />
 
         {/* Neo-brutalist Technical Blog Section — commented out, not in use

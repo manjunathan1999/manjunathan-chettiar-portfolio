@@ -1,10 +1,11 @@
 import { motion } from 'motion/react';
 import { Briefcase, ArrowUpRight, CheckSquare } from 'lucide-react';
 import { RESUME_DATA } from '@/src/constants';
+import ScrollGlitchText from '@/src/components/ScrollGlitchText';
 
 export default function Experience() {
   return (
-    <section id="experience" className="py-[var(--spacing-section)] border-t-[3px] border-primary bg-secondary/10">
+    <section id="experience" className="py-[var(--spacing-section)] border-primary bg-secondary/10">
       <div className="container mx-auto px-6">
         
         {/* Section Header */}
@@ -19,7 +20,7 @@ export default function Experience() {
               INDEX_02 // SYSTEM_LOG_HISTORIC
             </div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tighter uppercase font-heading text-primary">
-              Work Experiences
+              <ScrollGlitchText text="Work Experiences" />
             </h2>
             <p className="text-sm sm:text-base text-muted-foreground font-mono leading-relaxed max-w-2xl">
               An chronological pipeline tracing architectural design achievements, API infrastructure, and microservices scaling logs.

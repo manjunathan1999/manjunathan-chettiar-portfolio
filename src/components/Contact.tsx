@@ -4,6 +4,7 @@ import { Send, Mail, Phone, MapPin, Sparkles } from 'lucide-react';
 import { RESUME_DATA } from '@/src/constants';
 import confetti from 'canvas-confetti';
 import { audioSystem } from '@/src/lib/audio';
+import ScrollGlitchText from '@/src/components/ScrollGlitchText';
 
 // Formspree endpoint — set VITE_FORMSPREE_ID in .env.local
 const FORMSPREE_URL = `https://formspree.io/f/${import.meta.env.VITE_FORMSPREE_ID || 'YOUR_FORM_ID'}`;
@@ -76,7 +77,7 @@ export default function Contact() {
               </div>
               
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tighter uppercase font-heading text-primary select-none">
-                Get In Touch
+                <ScrollGlitchText text="Get In Touch" />
               </h2>
               
               <p className="text-sm sm:text-base text-muted-foreground font-mono leading-relaxed max-w-md">

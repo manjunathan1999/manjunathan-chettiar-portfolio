@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { GraduationCap, Award, CheckCircle2 } from 'lucide-react';
 import { RESUME_DATA } from '@/src/constants';
+import ScrollGlitchText from '@/src/components/ScrollGlitchText';
 
 export default function Education() {
   return (
@@ -21,7 +22,7 @@ export default function Education() {
                 <GraduationCap className="h-5 w-5" />
               </div>
               <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight uppercase font-heading text-primary">
-                Education Registry
+                <ScrollGlitchText text="Education Registry" />
               </h2>
             </div>
 
@@ -60,7 +61,7 @@ export default function Education() {
                 <Award className="h-5 w-5" />
               </div>
               <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight uppercase font-heading text-primary">
-                Active Certifications
+                <ScrollGlitchText text="Active Certifications" />
               </h2>
             </div>
 

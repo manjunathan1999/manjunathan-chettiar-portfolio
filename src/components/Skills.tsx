@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { RESUME_DATA } from '@/src/constants';
 import { Sparkles, Code, Database, Layers, Terminal as ToolIcon, ShieldCheck } from 'lucide-react';
 import { audioSystem } from '@/src/lib/audio';
+import ScrollGlitchText from '@/src/components/ScrollGlitchText';
 
 const skillCategories = [
   { key: 'languages', label: 'Programming Languages', icon: Code },
@@ -28,7 +29,7 @@ export default function Skills() {
               INDEX_03 // CORE_CAPABILITIES
             </div>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tighter uppercase font-heading text-primary">
-              Technical Stack
+              <ScrollGlitchText text="Technical Stack" />
             </h2>
             <p className="text-sm sm:text-base text-muted-foreground font-mono leading-relaxed max-w-xl mx-auto">
               A comprehensive monospaced registry of specialized backend tools, languages, and containerization modules.
