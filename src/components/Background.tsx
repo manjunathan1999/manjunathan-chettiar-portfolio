@@ -1,17 +1,15 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useState, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Points, PointMaterial, Float, MeshDistortMaterial } from '@react-three/drei';
 import * as THREE from 'three';
 
 function Grid() {
-  const { viewport } = useThree();
   const meshRef = useRef<THREE.Mesh>(null);
   
   useFrame((state) => {
     if (meshRef.current) {
       meshRef.current.rotation.x = -Math.PI / 2.5 + state.mouse.y * 0.05;
       meshRef.current.rotation.y = state.mouse.x * 0.05;
-      // Animate grid movement
       if (meshRef.current.material instanceof THREE.MeshBasicMaterial) {
         meshRef.current.material.opacity = 0.1 + Math.sin(state.clock.elapsedTime) * 0.05;
       }
@@ -50,7 +48,6 @@ function SciFiParticles() {
       ref.current.rotation.y += delta * 0.03;
       ref.current.rotation.x += delta * 0.01;
       
-      // React to mouse
       ref.current.position.x = THREE.MathUtils.lerp(ref.current.position.x, mouse.x * 0.5, 0.05);
       ref.current.position.y = THREE.MathUtils.lerp(ref.current.position.y, mouse.y * 0.5, 0.05);
     }
@@ -98,18 +95,59 @@ function FloatingCore() {
 }
 
 export default function Background() {
+  const [isVisible, setIsVisible] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Pause Three.js rendering when page is not visible (tab hidden)
+  // and when user has scrolled far enough that background is obscured
+  useEffect(() => {
+    // Use Page Visibility API to pause when tab is hidden
+    const handleVisibilityChange = () => {
+      setIsVisible(!document.hidden);
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    // Pause rendering after user scrolls past first viewport
+    // (background is fixed but covered by content sections)
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          const viewportHeight = window.innerHeight;
+          // Pause when scrolled past 1.5 viewports (content fully covers background)
+          setIsVisible(scrollY < viewportHeight * 1.5 && !document.hidden);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
-    <div className="fixed inset-0 -z-10 bg-background transition-colors duration-500 overflow-hidden">
+    <div ref={containerRef} className="fixed inset-0 -z-10 bg-background transition-colors duration-500 overflow-hidden">
       {/* Gradient Overlay for Sci-Fi feel */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--primary),0.05),transparent_70%)] pointer-events-none" />
       
-      <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} intensity={1} />
-        <Grid />
-        <SciFiParticles />
-        <FloatingCore />
-      </Canvas>
+      {/* frameloop="demand" would stop all rendering; instead we conditionally mount */}
+      {isVisible ? (
+        <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} intensity={1} />
+          <Grid />
+          <SciFiParticles />
+          <FloatingCore />
+        </Canvas>
+      ) : (
+        // Static fallback — keeps the dark background without GPU cost
+        <div className="absolute inset-0" />
+      )}
     </div>
   );
 }

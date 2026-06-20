@@ -158,6 +158,8 @@
   left: 0;
   animation: scanline 10s linear infinite;
   pointer-events: none;
+  will-change: transform;
+  contain: strict;
 }
 
 @keyframes scanline {
@@ -277,19 +279,19 @@ body::-webkit-scrollbar,
   --color-destructive-foreground: #000000 !important;
 }
 
-/* Custom cursor — hide default, show a glowing terminal dot */
-* {
-  cursor: none !important;
+/* Custom cursor — hide default, show a glowing terminal dot (scoped to body) */
+body {
+  cursor: none;
 }
 
-a,
-button,
-[role='button'],
-input,
-textarea,
-select,
-label {
-  cursor: none !important;
+body a,
+body button,
+body [role='button'],
+body input,
+body textarea,
+body select,
+body label {
+  cursor: none;
 }
 
 /* CRT Power-On Animation Keyframes */
@@ -340,5 +342,37 @@ label {
   }
   50% {
     opacity: 0;
+  }
+}
+
+/* Reduced motion: disable all non-essential animations for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .scanline {
+    animation: none !important;
+    display: none;
+  }
+
+  .hover-lift {
+    transition: none !important;
+  }
+
+  .hover-lift:hover {
+    transform: none !important;
+  }
+
+  body::before {
+    display: none;
+  }
+
+  /* Disable custom cursor trail for reduced motion users */
+  body,
+  body a,
+  body button,
+  body [role='button'],
+  body input,
+  body textarea,
+  body select,
+  body label {
+    cursor: auto;
   }
 }

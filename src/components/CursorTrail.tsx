@@ -18,8 +18,13 @@ export default function CursorTrail() {
   const particlesRef = useRef<Particle[]>([]);
   const mouseRef = useRef({ x: -100, y: -100 });
   const animFrameRef = useRef<number>(0);
+  const isIdleRef = useRef(true);
+  const idleTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    // Respect reduced motion preference — render only cursor dot, no particles
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     const canvas = canvasRef.current;
     const cursorDot = cursorRef.current;
     const cursorRing = cursorRingRef.current;
@@ -40,16 +45,35 @@ export default function CursorTrail() {
       height = canvas.height = window.innerHeight;
     };
 
+    // Throttle mousemove to ~60fps (16ms) to prevent excessive particle spawning
+    let lastMoveTime = 0;
+    const THROTTLE_MS = 16;
+
     const handleMouseMove = (e: MouseEvent) => {
+      const now = performance.now();
+      
+      // Always update cursor position (instant feedback)
       mouseRef.current.x = e.clientX;
       mouseRef.current.y = e.clientY;
-
-      // Move the dot cursor instantly
       cursorDot.style.left = `${e.clientX}px`;
       cursorDot.style.top = `${e.clientY}px`;
 
-      // Spawn particles on movement
-      const count = 2 + Math.floor(Math.random() * 2);
+      // Mark as active, reset idle timer
+      isIdleRef.current = false;
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+      idleTimerRef.current = setTimeout(() => {
+        isIdleRef.current = true;
+      }, 150); // Go idle after 150ms of no movement
+
+      // Throttle particle spawning
+      if (now - lastMoveTime < THROTTLE_MS) return;
+      lastMoveTime = now;
+
+      // Skip particle spawning if reduced motion is preferred
+      if (prefersReducedMotion) return;
+
+      // Spawn particles on movement (reduced from 2-3 to 1-2)
+      const count = 1 + Math.floor(Math.random() * 2);
       for (let i = 0; i < count; i++) {
         particlesRef.current.push({
           x: e.clientX + (Math.random() - 0.5) * 10,
@@ -62,8 +86,8 @@ export default function CursorTrail() {
       }
 
       // Cap particles for performance
-      if (particlesRef.current.length > 150) {
-        particlesRef.current = particlesRef.current.slice(-150);
+      if (particlesRef.current.length > 100) {
+        particlesRef.current = particlesRef.current.slice(-100);
       }
     };
 
@@ -85,6 +109,9 @@ export default function CursorTrail() {
       ringY += (mouseRef.current.y - ringY) * 0.15;
       cursorRing.style.left = `${ringX}px`;
       cursorRing.style.top = `${ringY}px`;
+
+      // Skip canvas work entirely when idle and no particles remain
+      if (isIdleRef.current && particlesRef.current.length === 0) return;
 
       ctx.clearRect(0, 0, width, height);
 
@@ -126,6 +153,7 @@ export default function CursorTrail() {
       document.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('mouseenter', handleMouseEnter);
       cancelAnimationFrame(animFrameRef.current);
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
     };
   }, []);
 
